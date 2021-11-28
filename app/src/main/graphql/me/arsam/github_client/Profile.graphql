@@ -1,0 +1,19 @@
+query Profile {
+  viewer {
+    name
+    email
+    login
+    bio
+    avatarUrl
+    location
+    twitterUsername
+    websiteUrl
+    url
+    followers {
+      totalCount
+    }
+    following {
+      totalCount
+    }
+  }
+}

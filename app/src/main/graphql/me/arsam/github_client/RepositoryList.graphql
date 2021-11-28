@@ -1,0 +1,22 @@
+query RepositoryList($pageCount: Int!, $endCursor: String) {
+  viewer {
+    name
+    repositories(first: $pageCount, after: $endCursor, privacy: PUBLIC) {
+      pageInfo {
+        startCursor
+        hasNextPage
+        endCursor
+      }
+      nodes {
+        name
+        description
+        createdAt
+        forkCount
+        stargazerCount
+        watchers {
+          totalCount
+        }
+      }
+    }
+  }
+}
