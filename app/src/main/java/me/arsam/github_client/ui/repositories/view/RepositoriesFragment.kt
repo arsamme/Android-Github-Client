@@ -6,19 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.lifecycleScope
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.apollographql.apollo.api.Input
-import com.apollographql.apollo.coroutines.await
-import com.apollographql.apollo.exception.ApolloException
-import kotlinx.coroutines.channels.Channel
-import me.arsam.github_client.Apollo
-import me.arsam.github_client.RepositoryListQuery
+import dagger.hilt.android.AndroidEntryPoint
 import me.arsam.github_client.databinding.FragmentRepositoriesBinding
 import me.arsam.github_client.ui.repositories.adapters.RepositoryListAdapter
 
+@AndroidEntryPoint
 class RepositoriesFragment : Fragment() {
     private lateinit var binding: FragmentRepositoriesBinding
+    private val repositoriesViewModel: RepositoriesViewModel by viewModels()
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -29,52 +27,23 @@ class RepositoriesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupViews()
+    }
 
-        val apollo = Apollo()
+    private fun setupViews() {
+        repositoriesViewModel.getRepos()
 
-        val repositories = mutableListOf<RepositoryListQuery.Node>()
+        val repositories = repositoriesViewModel.repositories.value ?: ArrayList()
         val adapter = RepositoryListAdapter(repositories)
-        binding.repositoriesRecyclerView.layoutManager =
+        binding.rvRepositories.layoutManager =
             LinearLayoutManager(requireContext())
-        binding.repositoriesRecyclerView.adapter = adapter
+        binding.rvRepositories.adapter = adapter
 
-
-        val channel = Channel<Unit>(Channel.CONFLATED)
-        channel.trySend(Unit)
-        adapter.onEndOfListReached = {
-            channel.trySend(Unit)
-        }
-
-        lifecycleScope.launchWhenResumed {
-            var cursor: String? = null
-            for (item in channel) {
-                val response = try {
-                    apollo.apolloClient.query(
-                        RepositoryListQuery(
-                            10,
-                            endCursor = Input.fromNullable(cursor)
-                        )
-                    ).await()
-                } catch (e: ApolloException) {
-                    Log.d("LaunchList", "Failure", e)
-                    null
-                }
-
-                val newRepositories = response?.data?.viewer?.repositories?.nodes?.filterNotNull();
-
-                if (newRepositories != null) {
-                    repositories.addAll(newRepositories)
-                    adapter.notifyDataSetChanged()
-                }
-
-                cursor = response?.data?.viewer?.repositories?.pageInfo?.endCursor;
-                if (response?.data?.viewer?.repositories?.pageInfo?.hasNextPage != true) {
-                    break
-                }
+        repositoriesViewModel.repositories.observe(viewLifecycleOwner) {
+            if (it != null) {
+                adapter.repositories = it
+                adapter.notifyDataSetChanged()
             }
-
-            adapter.onEndOfListReached = null
-            channel.close()
         }
     }
 }

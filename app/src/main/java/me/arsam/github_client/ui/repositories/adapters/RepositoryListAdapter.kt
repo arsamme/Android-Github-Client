@@ -4,13 +4,13 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import me.arsam.github_client.RepositoryListQuery
 import android.view.LayoutInflater
+import me.arsam.github_client.data.models.Repository
 import me.arsam.github_client.databinding.RepositoryListItemBinding
 
 
 class RepositoryListAdapter(
-    private val repositories: List<RepositoryListQuery.Node?>
+    var repositories: List<Repository>
 ) : RecyclerView.Adapter<RepositoryListAdapter.ViewHolder>() {
-    var onEndOfListReached: (() -> Unit)? = null
 
     override fun getItemCount(): Int {
         return repositories.size
@@ -31,15 +31,11 @@ class RepositoryListAdapter(
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val item = repositories[position]
-        holder.binding.lblTitle.text = item?.name
-        holder.binding.lblDescription.text = item?.description
-        holder.binding.lblWatchCount.text = item?.watchers?.totalCount.toString()
-        holder.binding.lblStarCount.text = item?.stargazerCount.toString()
-        holder.binding.lblForkCount.text = item?.forkCount.toString()
-
-        if (position == repositories.size - 1) {
-            onEndOfListReached?.invoke()
-        }
+        holder.binding.txtTitle.text = item.name
+        holder.binding.txtDescription.text = item.description
+        holder.binding.txtWatchCount.text = item.watchersCount.toString()
+        holder.binding.txtStarCount.text = item.starsCount.toString()
+        holder.binding.txtForkCount.text = item.forksCount.toString()
     }
 
     class ViewHolder internal constructor(val binding: RepositoryListItemBinding) :

@@ -1,13 +1,13 @@
-query RepositoryList($pageCount: Int!, $endCursor: String) {
+query RepositoryList {
   viewer {
-    name
-    repositories(first: $pageCount, after: $endCursor, privacy: PUBLIC) {
+    repositories(first: 100, privacy: PUBLIC, orderBy: {field: CREATED_AT, direction: DESC}) {
       pageInfo {
         startCursor
         hasNextPage
         endCursor
       }
       nodes {
+        id
         name
         description
         createdAt

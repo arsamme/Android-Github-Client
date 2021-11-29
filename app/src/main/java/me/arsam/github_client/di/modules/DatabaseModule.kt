@@ -5,21 +5,21 @@ import androidx.room.Room
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ActivityRetainedComponent
 import dagger.hilt.android.qualifiers.ApplicationContext
-import me.arsam.github_client.data.db.database.TokenDatabase
+import dagger.hilt.components.SingletonComponent
+import me.arsam.github_client.data.db.database.AppDatabase
 import javax.inject.Singleton
 
 @Module
-@InstallIn(ActivityRetainedComponent::class)
+@InstallIn(SingletonComponent::class)
 object DatabaseModule {
     @Singleton
     @Provides
-    fun providesTokenDatabase(@ApplicationContext context: Context): TokenDatabase {
-        return Room.databaseBuilder(context, TokenDatabase::class.java, TokenDatabase.DB_NAME).build()
+    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+        return Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DB_NAME).build()
     }
 
     @Singleton
     @Provides
-    fun providesNoteDao(tokenDatabase: TokenDatabase) = tokenDatabase.getTokenDao()
+    fun provideRepositoryDao(appDatabase: AppDatabase) = appDatabase.getRepositoryDao()
 }

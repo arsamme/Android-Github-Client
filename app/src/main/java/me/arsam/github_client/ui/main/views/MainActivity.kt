@@ -13,7 +13,7 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val navController by lazy {
-        (supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment).navController
+        (supportFragmentManager.findFragmentById(R.id.navHostFragment) as NavHostFragment).navController
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,6 +26,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
-        binding.bottomNavigation.setupWithNavController(navController);
+        binding.bottomNavigation.setupWithNavController(navController)
     }
 }
