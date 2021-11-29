@@ -43,6 +43,5 @@ class RepositoryListAdapter(
     }
 
     class ViewHolder internal constructor(val binding: RepositoryListItemBinding) :
-        RecyclerView.ViewHolder(binding.root) {
-    }
+        RecyclerView.ViewHolder(binding.root)
 }

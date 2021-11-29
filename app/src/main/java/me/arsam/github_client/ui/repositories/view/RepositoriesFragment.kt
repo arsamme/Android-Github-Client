@@ -30,7 +30,7 @@ class RepositoriesFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val apollo = Apollo(requireContext());
+        val apollo = Apollo()
 
         val repositories = mutableListOf<RepositoryListQuery.Node>()
         val adapter = RepositoryListAdapter(repositories)
