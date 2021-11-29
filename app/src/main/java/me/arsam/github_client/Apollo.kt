@@ -17,10 +17,10 @@ class Apollo {
 }
 
 
-private class AuthorizationInterceptor() : Interceptor {
+private class AuthorizationInterceptor : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request().newBuilder()
-            .addHeader("Authorization", "Bearer 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")
+            .addHeader("Authorization", "Bearer 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")
             .build()
 
         return chain.proceed(request)
