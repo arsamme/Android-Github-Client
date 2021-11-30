@@ -34,8 +34,8 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun providesConnectionUtils(application: Application) =
-        ConnectionUtils(application.applicationContext)
+    fun providesConnectionUtils(@ApplicationContext context: Context) =
+        ConnectionUtils(context)
 
     @Singleton
     @Provides
