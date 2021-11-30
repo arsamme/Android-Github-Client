@@ -3,6 +3,7 @@ package me.arsam.github_client.data.models
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import kotlinx.coroutines.flow.Flow
 
 @Entity(tableName = "users")
 data class User(

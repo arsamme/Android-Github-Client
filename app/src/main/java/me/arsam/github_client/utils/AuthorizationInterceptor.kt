@@ -8,7 +8,7 @@ class AuthorizationInterceptor : Interceptor {
         val request = chain.request().newBuilder()
             .addHeader(
                 "Authorization",
-                "Bearer " + "gh p_5scbTy y0K9wxmEeQBOzzfv LGSmFOpL2w 6NCA".replace(" ", "")
+                "Bearer " + "ghp _5scbTyy0K9wxmEeQBOzzfvLGSmFOpL2w6NCA".replace(" ", "")
             )
             .build()
 

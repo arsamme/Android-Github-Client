@@ -13,7 +13,7 @@ interface RepositoryDao {
     suspend fun getAll(): List<Repository>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insert(repository: Repository)
+    suspend fun insert(vararg repository: Repository)
 
     @Query("DELETE FROM repositories")
     suspend fun deleteAll()

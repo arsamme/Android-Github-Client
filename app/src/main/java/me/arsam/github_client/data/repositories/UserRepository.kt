@@ -1,60 +1,49 @@
 package me.arsam.github_client.data.repositories
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import com.apollographql.apollo.ApolloClient
-import com.apollographql.apollo.coroutines.await
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.withContext
-import me.arsam.github_client.ProfileQuery
+import me.arsam.github_client.data.Resource
+import me.arsam.github_client.data.api.ApiResponse
+import me.arsam.github_client.data.api.GithubApi
 import me.arsam.github_client.data.db.dao.UserDao
 import me.arsam.github_client.data.models.User
+import me.arsam.github_client.utils.ConnectionUtils
 import javax.inject.Inject
+
 
 class UserRepository @Inject constructor(
     private val userDao: UserDao,
-    private val apolloClient: ApolloClient
+    private val githubApi: GithubApi,
+    private val connectionUtils: ConnectionUtils
 ) {
-    fun getProfile(): LiveData<User> {
-        val profileLiveData: MutableLiveData<User> = MutableLiveData()
 
-        CoroutineScope(Dispatchers.IO).launch {
-            val localProfile = userDao.getProfile()
-            withContext(Dispatchers.Main) {
-                if (localProfile != null) {
-                    profileLiveData.postValue(localProfile)
-                }
-            }
-
-            try {
-                val response = apolloClient.query(ProfileQuery()).await()
-                val remoteProfile = response.data?.viewer
-                Log.e("ars tag", remoteProfile.toString())
-                if (remoteProfile != null) {
+    fun getProfile(): Flow<Resource<User>> {
+        return object : NetworkBoundResource<User>() {
+            override suspend fun saveNetworkResult(item: User) {
+                withContext(Dispatchers.IO) {
                     userDao.deleteAll()
-                    val newProfile = User(
-                        id = remoteProfile.id,
-                        name = remoteProfile.name,
-                        email = remoteProfile.email,
-                        username = remoteProfile.login,
-                        bio = remoteProfile.bio,
-                        avatarUrl = remoteProfile.avatarUrl.toString(),
-                        followersCount = remoteProfile.followers.totalCount,
-                        followingsCount = remoteProfile.following.totalCount,
-                    )
-                    userDao.insert(newProfile)
-                    withContext(Dispatchers.Main) {
-                        profileLiveData.postValue(newProfile)
-                    }
+                    userDao.insert(item)
                 }
-            } catch (exception: Exception) {
-                Log.e("apollo exp", exception.toString())
             }
-        }
 
-        return profileLiveData
+            override fun shouldFetch(data: User?): Boolean {
+                return connectionUtils.isNetworkAvailable()
+            }
+
+            override suspend fun loadFromDb(): User? {
+                return withContext(Dispatchers.IO) {
+                    userDao.getProfile()
+                }
+            }
+
+            override suspend fun fetchFromNetwork(): ApiResponse<User> {
+                return withContext(Dispatchers.IO) {
+                    githubApi.getProfile()
+                }
+            }
+
+        }.asFlow()
     }
 }

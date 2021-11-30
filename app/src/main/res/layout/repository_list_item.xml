@@ -13,7 +13,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:id="@+id/txtTitle"
+            android:id="@+id/titleTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textSize="18sp"
@@ -21,68 +21,68 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:id="@+id/txtDescription"
+            android:id="@+id/descriptionTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginVertical="10dp"
             android:textSize="14sp"
-            app:layout_constraintTop_toBottomOf="@+id/txtTitle" />
+            app:layout_constraintTop_toBottomOf="@+id/titleTextView" />
 
         <ImageView
-            android:id="@+id/imgWatchIcon"
+            android:id="@+id/watchIconImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_round_remove_red_eye_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
         <TextView
-            android:id="@+id/txtWatchCount"
+            android:id="@+id/watchCountTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgWatchIcon"
-            app:layout_constraintEnd_toStartOf="@+id/imgStarIcon"
-            app:layout_constraintStart_toEndOf="@+id/imgWatchIcon"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+            app:layout_constraintBottom_toBottomOf="@+id/watchIconImageView"
+            app:layout_constraintEnd_toStartOf="@+id/starIconImageView"
+            app:layout_constraintStart_toEndOf="@+id/watchIconImageView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
             tools:text="test" />
 
         <ImageView
-            android:id="@+id/imgStarIcon"
+            android:id="@+id/starIconImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_round_star_24"
-            app:layout_constraintEnd_toStartOf="@+id/txtStarCount"
-            app:layout_constraintStart_toEndOf="@+id/txtWatchCount"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
+            app:layout_constraintEnd_toStartOf="@+id/starCountTextView"
+            app:layout_constraintStart_toEndOf="@+id/watchCountTextView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
         <TextView
-            android:id="@+id/txtStarCount"
+            android:id="@+id/starCountTextView"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgStarIcon"
-            app:layout_constraintEnd_toStartOf="@+id/imgForkIcon"
-            app:layout_constraintStart_toEndOf="@+id/imgStarIcon"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+            app:layout_constraintBottom_toBottomOf="@+id/starIconImageView"
+            app:layout_constraintEnd_toStartOf="@+id/forkIconImageView"
+            app:layout_constraintStart_toEndOf="@+id/starIconImageView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
             tools:text="test" />
 
         <ImageView
-            android:id="@+id/imgForkIcon"
+            android:id="@+id/forkIconImageView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_round_call_split_24"
-            app:layout_constraintEnd_toStartOf="@+id/txtForkCount"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescription" />
+            app:layout_constraintEnd_toStartOf="@+id/forkCountTextView"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView" />
 
         <TextView
-            android:id="@+id/txtForkCount"
+            android:id="@+id/forkCountTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            app:layout_constraintBottom_toBottomOf="@+id/imgForkIcon"
+            app:layout_constraintBottom_toBottomOf="@+id/forkIconImageView"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtDescription"
+            app:layout_constraintTop_toBottomOf="@+id/descriptionTextView"
             tools:text="test" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

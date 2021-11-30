@@ -5,23 +5,26 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.Glide
 import dagger.hilt.android.AndroidEntryPoint
+import me.arsam.github_client.R
+import me.arsam.github_client.data.Resource
 import me.arsam.github_client.databinding.FragmentProfileBinding
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() {
-    private lateinit var binding: FragmentProfileBinding
+    private var _binding: FragmentProfileBinding? = null
+    private val binding get() = _binding!!
+
     private val profileViewModel: ProfileViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = FragmentProfileBinding.inflate(inflater, container, false)
+        _binding = FragmentProfileBinding.inflate(inflater, container, false)
         return binding.root
     }
 
@@ -31,19 +34,58 @@ class ProfileFragment : Fragment() {
         setupViews()
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun setupViews() {
         profileViewModel.profileLiveData.observe(viewLifecycleOwner) {
-            if (it != null) {
-                binding.profileFragmentParent.visibility = ConstraintLayout.VISIBLE
-                binding.txtName.text = it.name
-                binding.txtEmail.text = it.email
-                binding.txtUsername.text = it.username
-                binding.txtFollowersCount.text = it.followersCount.toString()
-                binding.txtFollowingsCount.text = it.followingsCount.toString()
-                binding.txtBio.text = it.bio
+            when (it) {
+                is Resource.Success -> {
+                    val profile = it.data
 
-                if (it.avatarUrl != null) {
-                    Glide.with(this).load(it.avatarUrl).circleCrop().into(binding.imgAvatar)
+                    binding.apply {
+                        loadingProgressBar.visibility = View.GONE
+                        errorTextView.visibility = View.GONE
+                        profileFragmentParent.visibility = View.VISIBLE
+                        nameTextView.text = profile.name
+                        emailTextView.text = profile.email
+                        usernameTextView.text = profile.username
+                        followersCountTextView.text = profile.followersCount.toString()
+                        followingsCountTextView.text = profile.followingsCount.toString()
+                        bioTextView.text = profile.bio
+                        if (profile.avatarUrl != null) {
+                            Glide
+                                .with(this@ProfileFragment)
+                                .load(profile.avatarUrl)
+                                .circleCrop()
+                                .into(avatarImageView)
+                        }
+                    }
+                }
+                Resource.Empty -> {
+                    binding.apply {
+                        loadingProgressBar.visibility = View.GONE
+                        profileFragmentParent.visibility = View.GONE
+                        errorTextView.visibility = View.VISIBLE
+                        errorTextView.text = resources.getString(R.string.failed_to_get_data)
+                    }
+                }
+                is Resource.Error -> {
+                    binding.apply {
+                        loadingProgressBar.visibility = View.GONE
+                        profileFragmentParent.visibility = View.GONE
+                        errorTextView.visibility = View.VISIBLE
+                        errorTextView.text = it.errorMessage
+                    }
+                }
+                Resource.Loading -> {
+                    binding.apply {
+                        loadingProgressBar.visibility = View.VISIBLE
+                        profileFragmentParent.visibility = View.GONE
+                        errorTextView.visibility = View.GONE
+                    }
                 }
             }
         }
