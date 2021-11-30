@@ -7,12 +7,15 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import me.arsam.github_client.data.db.LocalDateTimeConverter
 import me.arsam.github_client.data.db.dao.RepositoryDao
+import me.arsam.github_client.data.db.dao.UserDao
 import me.arsam.github_client.data.models.Repository
+import me.arsam.github_client.data.models.User
 
-@Database(entities = [Repository::class], version = 1)
+@Database(entities = [Repository::class, User::class], version = 1)
 @TypeConverters(LocalDateTimeConverter::class)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun getRepositoryDao(): RepositoryDao
+    abstract fun getUserDao(): UserDao
 
     companion object {
         const val DB_NAME = "app_database.db"

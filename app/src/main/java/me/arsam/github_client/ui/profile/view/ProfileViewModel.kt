@@ -1,30 +1,15 @@
 package me.arsam.github_client.ui.profile.view
 
-import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import me.arsam.github_client.data.models.Repository
-import me.arsam.github_client.data.repositories.RepoRepository
+import me.arsam.github_client.data.models.User
+import me.arsam.github_client.data.repositories.UserRepository
 import javax.inject.Inject
 
 @HiltViewModel
-class ProfileViewModel @Inject constructor(private val repoRepository: RepoRepository) :
+class ProfileViewModel @Inject constructor(userRepository: UserRepository) :
     ViewModel() {
 
-    val repositories: MutableLiveData<List<Repository>> = MutableLiveData()
-
-    fun getRepos() {
-        CoroutineScope(Dispatchers.IO).launch {
-            val repos = repoRepository.getRepositories()
-            withContext(Dispatchers.Main) {
-                repos.observeForever {
-                    repositories.postValue(it)
-                }
-            }
-        }
-    }
+    val profileLiveData: LiveData<User> = userRepository.getProfile()
 }

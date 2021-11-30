@@ -35,6 +35,7 @@ class RepoRepository @Inject constructor(
                 val response = apolloClient.query(RepositoryListQuery()).await()
                 val remoteRepos = response.data?.viewer?.repositories?.nodes?.filterNotNull()
                 if (remoteRepos != null) {
+                    repositoryDao.deleteAll()
                     val newRepositories: MutableList<Repository> = ArrayList()
                     for (repo in remoteRepos) {
                         val newRepo = Repository(

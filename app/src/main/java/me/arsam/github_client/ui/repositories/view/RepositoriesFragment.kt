@@ -31,8 +31,6 @@ class RepositoriesFragment : Fragment() {
     }
 
     private fun setupViews() {
-        repositoriesViewModel.getRepos()
-
         val repositories = repositoriesViewModel.repositories.value ?: ArrayList()
         val adapter = RepositoryListAdapter(repositories)
         binding.rvRepositories.layoutManager =

@@ -22,4 +22,8 @@ object DatabaseModule {
     @Singleton
     @Provides
     fun provideRepositoryDao(appDatabase: AppDatabase) = appDatabase.getRepositoryDao()
+
+    @Singleton
+    @Provides
+    fun providesUserDao(appDatabase: AppDatabase) = appDatabase.getUserDao()
 }

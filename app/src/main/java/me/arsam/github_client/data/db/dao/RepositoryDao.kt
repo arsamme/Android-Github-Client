@@ -16,5 +16,5 @@ interface RepositoryDao {
     suspend fun insert(repository: Repository)
 
     @Query("DELETE FROM repositories")
-    suspend fun deleteAll();
+    suspend fun deleteAll()
 }
