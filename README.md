@@ -9,5 +9,5 @@ Screenshots :
 
 |Profile|Repositories|
 |--|--|
-|![Profile](https://raw.githubusercontent.com/arsamme/Android-Github-Client/develop/screenshots/profile.jpg)|![Repositories](https://raw.githubusercontent.com/arsamme/Android-Github-Client/develop/screenshots/repos.jpg)   |
+|![Profile](https://raw.githubusercontent.com/arsamme/Android-Github-Client/main/screenshots/profile.jpg)|![Repositories](https://raw.githubusercontent.com/arsamme/Android-Github-Client/main/screenshots/repos.jpg)   |
 
